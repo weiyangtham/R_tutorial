@@ -10,7 +10,9 @@ output:
 ## R and R Studio {.build}
 Getting started 
 
-- Download R and RStudio (first exit off the Google highway!) blah blah
+- Download R and RStudio (first exit off the Google highway!)
+- a change done locally in my Mac
+- Download R and RStudio (first exit off the Google highway!)
 - Learn with the `swirl` package (<http://swirlstats.com/>)
 
 Why R?
