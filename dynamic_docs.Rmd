@@ -13,6 +13,7 @@ Getting started
 - Download R and RStudio (first exit off the Google highway!)
 - a change done locally in my Mac
 - a change done on server
+- another change on server - updated on remote repo 
 - Download R and RStudio (first exit off the Google highway!)
 - Learn with the `swirl` package (<http://swirlstats.com/>)
 
