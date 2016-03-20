@@ -1,0 +1,129 @@
+---
+title: "Dynamic Documents in R"
+author: "Tham, Wei Yang"
+date: "March 2, 2016"
+output: 
+  ioslides_presentation:
+    incremental: true
+---
+
+## R and R Studio {.build}
+
+Getting started 
+
+- Download R and RStudio (first exit off the Google highway!)
+- Learn with the `swirl` package (<http://swirlstats.com/>)
+
+Why R?
+
+- Free
+- `ggplot2` (graphics) and `dplyr` (data wrangling) packages
+- Dynamic documents - easy to embed code into documents
+  + My examples are for R Markdown, which can be converted into pdf 
+  + This can all be done in LaTex directly
+  
+## Embedding code - 1 {.build}
+
+- Embedding code in documents is easy
+- Just type:
+
+<pre><code>```{r chunk_name}
+x <- 1 + 1
+y <- 6
+x/y
+```</code></pre>
+
+```{r, ex1}
+x <- 1 + 1
+y <- 6
+x/y
+```
+
+## Embedding code - 2 {.build}
+
+- Code can be embedded inline too
+```{r ex2, message = F, warning = F}
+# load the "nycflights13" package, which contains flights data
+library(nycflights13)
+library(dplyr)
+flights %>% select(year, month, arr_delay, dep_delay, carrier) %>% 
+head(., 3)
+```
+
+## Embedding code - 3 {.build}
+
+- I want to say: The flights dataset has N observations and K variables
+```{r ex2a}
+dim(flights)
+```
+
+- The `flights` dataset has `` `r '\x60r dim(flights)[1]\x60'` ``  observations and `` `r '\x60r dim(flights)[2]\x60'` `` variables
+- The `flights` dataset has `r dim(flights)[1]` observations and `r dim(flights)[2]` variables
+- No more cutting and pasting!
+
+## Plots {.build}
+```{r fig1, fig.align = 'center'}
+library(ggplot2)
+qplot(carat, price, data = diamonds %>% filter(cut == "Ideal"))
+```
+
+## Regression tables - 1 
+```{r ex3a, echo = F, message = F}
+library("AER") # Applied Econometrics with R
+library("stargazer")
+library(dplyr)
+library(nycflights13)
+
+daily <- flights %>%
+  filter(origin == "EWR") %>%
+  group_by(year, month, day) %>%
+  summarise(delay = mean(dep_delay, na.rm = TRUE))
+
+daily_weather <- weather %>%
+  filter(origin == "EWR") %>%
+  group_by(year, month, day) %>%
+  summarise(temp   = mean(temp, na.rm = TRUE),
+            wind   = mean(wind_speed, na.rm = TRUE),
+            precip = sum(precip, na.rm = TRUE))
+
+# Merge flights with weather data frames
+both <- inner_join(daily, daily_weather) %>% 
+  data.frame()  # Temporary fix
+
+# Create an indicator for quarter
+both$quarter <- cut(both$month, breaks = c(0, 3, 6, 9, 12), 
+                                labels = c("1", "2", "3", "4"))
+
+# Create a vector of class logical
+both$hot <- as.logical(both$temp > 85)
+```
+
+Lots of options for generating reg tables e.g. stargazer (get it?)
+```{r ex3b, eval = F, results = 'asis', align = 'center'}
+output  <- lm(delay ~ temp + wind + precip, data = both)
+output2 <- lm(delay ~ temp + wind + precip + quarter, data = both)
+stargazer(output, output2, type = "html", keep.stat = c("n", "adj.rsq"), 
+omit = "quarter", style = "aer")
+```
+
+## Regression tables - AER {.flexbox .vcenter}
+```{r ex3c, echo = F, results = 'asis'}
+output  <- lm(delay ~ temp + wind + precip, data = both)
+output2 <- lm(delay ~ temp + wind + precip + quarter, data = both)
+stargazer(output, output2, type = "html", keep.stat = c("n", "adj.rsq"),  
+omit = "quarter", style = "aer")
+```
+
+## Regression tables - QJE {.flexbox .vcenter}
+```{r ex3d, echo = F, results = 'asis'}
+output  <- lm(delay ~ temp + wind + precip, data = both)
+output2 <- lm(delay ~ temp + wind + precip + quarter, data = both)
+stargazer(output, output2, type = "html", keep.stat = c("n", "adj.rsq"),  
+omit = "quarter", style = "qje")
+```
+
+## References
+
+- [Jake Russ's stargazer cheatsheet](http://jakeruss.com/cheatsheets/stargazer.html)
+- Hlavac, Marek (2015). stargazer: Well-Formatted Regression and Summary Statistics Tables. R
+package version 5.2. <<http://CRAN.R-project.org/package=stargazer>>
