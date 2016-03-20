@@ -15,6 +15,7 @@ Getting started
 - a change done on server
 - Download R and RStudio (first exit off the Google highway!)
 - Learn with the `swirl` package (<http://swirlstats.com/>)
+- another change on mac - not committed
 
 Why R?
 
