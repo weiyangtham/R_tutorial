@@ -8,10 +8,9 @@ output:
 ---
 
 ## R and R Studio {.build}
-blah blah blah 
 Getting started 
 
-- Download R and RStudio (first exit off the Google highway!)
+- Download R and RStudio (first exit off the Google highway!) blah blah
 - Learn with the `swirl` package (<http://swirlstats.com/>)
 
 Why R?
