@@ -11,6 +11,7 @@ output:
 
 Getting started 
 
+- a change done locally in my Mac
 - Download R and RStudio (first exit off the Google highway!)
 - Learn with the `swirl` package (<http://swirlstats.com/>)
 
